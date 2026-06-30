@@ -19,3 +19,4 @@ groq==0.11.0
 # mini "health-check" veb-serverini ishga tushirish uchun ham foydalanamiz.
 # (versiyasi aiogram bilan mos kelishi uchun aniq ko'rsatilmadi, pip o'zi mos versiyani tanlaydi)
 aiohttp==3.10.10
+httpx==0.27.2
