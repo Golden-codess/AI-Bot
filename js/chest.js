@@ -2,6 +2,11 @@
  * ============================================================================
  *  CHEST.JS — GOLDENAPP SIRLI SANDIQ MODULI
  * ============================================================================
+ *  Loyiha qoidasi: real moliyaviy qiymatga ega birlik (Telegram Stars)
+ *  HECH QACHON tasodifiy miqdorda berilmaydi — faqat aniq, oldindan
+ *  belgilangan (deterministik) formula bilan. Tasodifiylik faqat COIN
+ *  miqdorida bo'lishi mumkin (real pulga aylanmaydigan, cheksiz resurs).
+ * ============================================================================
  */
 
 const GoldenappChest = {
@@ -23,10 +28,22 @@ const GoldenappChest = {
     document.getElementById('chestScrim').addEventListener('click', () => this.close());
     document.getElementById('chestCloseBtn').addEventListener('click', () => this.close());
     document.getElementById('chestWatchBtn').addEventListener('click', () => this._watch());
+
+    // Sandiq ochilganlar sonini localStorage'dan tiklash
+    try {
+      const saved = localStorage.getItem('chest_normalOpened');
+      if (saved) this.state.normalOpened = parseInt(saved, 10) || 0;
+    } catch (e) { /* ignore */ }
   },
 
   _cfg() {
     return this.state.mode === 'big' ? this.REWARD_TABLE.big : this.REWARD_TABLE.normal;
+  },
+
+  _saveState() {
+    try {
+      localStorage.setItem('chest_normalOpened', String(this.state.normalOpened));
+    } catch (e) { /* ignore */ }
   },
 
   async open() {
@@ -38,7 +55,8 @@ const GoldenappChest = {
     const res = await GoldenappApi.startChest();
     this.state.sessionId = (res && res.session_id) || null;
 
-    document.getElementById('chestSheet').classList.add('chest-sheet--open');
+    const sheet = document.getElementById('chestSheet');
+    sheet.classList.add('chest-sheet--open');
     document.getElementById('chestVisual').className = 'chest-visual';
     document.getElementById('chestRewardCallout').hidden = true;
     document.getElementById('chestWatchBtn').hidden = false;
@@ -68,7 +86,8 @@ const GoldenappChest = {
       () => this._onConfirmed(), 
       (err) => {
         btn.disabled = false;
-        GoldenappUI.toast('Reklama ko\'rsatilmadi: ' + (err.message || 'xatolik'));
+        const msg = err?.message || 'Reklama ko\'rsatilmadi';
+        GoldenappUI.toast(msg);
         console.error('[Chest] Reklama xatosi:', err);
       }
     );
@@ -121,7 +140,10 @@ const GoldenappChest = {
     document.getElementById('chestRewardValue').textContent =
       `+${cfg.finalCoin.toLocaleString('uz-UZ')} 🪙`;
 
-    if (this.state.mode === 'normal') this.state.normalOpened += 1;
+    if (this.state.mode === 'normal') {
+      this.state.normalOpened += 1;
+      this._saveState();
+    }
     this.state.adsInChest = 0;
   },
 };
