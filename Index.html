@@ -1,1 +1,92 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>⭐ Coin Miner</title>
+    <script src="https://telegram.adsgram.ai/js/adsgram.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- HEADER -->
+        <header id="header">
+            <div class="balance-card">
+                <span class="icon">🪙</span>
+                <span id="coinBalance">0</span>
+                <small>tang</small>
+            </div>
+            <div class="balance-card star">
+                <span class="icon">⭐</span>
+                <span id="starBalance">0.00</span>
+                <small>stars</small>
+            </div>
+            <div class="balance-card ads">
+                <span class="icon">📺</span>
+                <span id="adsCount">0</span>
+                <small>rekl</small>
+            </div>
+        </header>
 
+        <!-- GAME -->
+        <main id="gameArea">
+            <div id="chestWrapper" onclick="startChestFlow()">
+                <div id="chestContainer">
+                    <div class="chest-lid"></div>
+                    <div class="chest-body">🎁</div>
+                    <div class="chest-glow"></div>
+                </div>
+                <div id="chestProgress"><div id="progressFill" style="width:0%"></div></div>
+                <div id="chestStatus">🔥 Bosing – sandiq oching!</div>
+            </div>
+
+            <div id="tapArea" onclick="handleTap()">
+                <div id="tapCoin">🪙</div>
+                <span id="tapCounter">+1</span>
+            </div>
+        </main>
+
+        <!-- NAV -->
+        <nav id="bottomNav">
+            <button class="nav-item active" data-tab="game">🎮 O'yin</button>
+            <button class="nav-item" data-tab="tasks">📋 Vazifalar</button>
+            <button class="nav-item" data-tab="exchange">💱 Ayirboshlash</button>
+            <button class="nav-item" data-tab="profile">👤 Profil</button>
+        </nav>
+
+        <!-- TABS -->
+        <section id="tabContent">
+            <div id="tab-game" class="tab-pane active">
+                <h2>🪙 Yig‘ishni boshlang!</h2>
+                <p>Har bir bosish <strong>+1 tanga</strong>. Sandiq orqali <strong>⭐ Stars</strong> yutib oling!</p>
+            </div>
+            <div id="tab-tasks" class="tab-pane" style="display:none;">
+                <h2>📋 Kunlik vazifalar</h2>
+                <div id="taskList"></div>
+                <p class="hint">✅ Har bir vazifa uchun <strong>300 coin</strong> va <strong>+1 reklama</strong></p>
+            </div>
+            <div id="tab-exchange" class="tab-pane" style="display:none;">
+                <h2>💱 Tanga → Stars</h2>
+                <div class="rate-box">1 ⭐ ≈ <span id="exchangeRate">4,875</span> tanga</div>
+                <p>Sizda: <strong id="exchangeCoins">0</strong> tanga</p>
+                <input type="number" id="exchangeInput" placeholder="Stars miqdori (1+)" min="1">
+                <button onclick="requestExchange()">Almashtirish</button>
+                <div id="exchangeResult" class="result-msg"></div>
+            </div>
+            <div id="tab-profile" class="tab-pane" style="display:none;">
+                <h2>👤 Mening ma'lumotlarim</h2>
+                <div class="profile-row"><span>ID:</span> <span id="userId">-</span></div>
+                <div class="profile-row"><span>Ism:</span> <span id="userName">-</span></div>
+                <div class="profile-row"><span>📺 Ko'rilgan reklama:</span> <span id="profileAds">0</span></div>
+                <hr>
+                <h3>⭐ Stars yechib olish</h3>
+                <p><small>Ruxsat: 15, 25 yoki 50+</small></p>
+                <input type="number" id="withdrawInput" placeholder="Stars soni..." min="15">
+                <button onclick="requestWithdraw()">So‘rov yuborish</button>
+                <div id="withdrawResult" class="result-msg"></div>
+            </div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
