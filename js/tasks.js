@@ -38,17 +38,23 @@ const GoldenappTasks = {
       `;
       if (!task.completed) {
         card.querySelector('.task-card__action').addEventListener('click', () => {
-          GoldenappAds.showTask(async () => {
-            const res = await GoldenappApi.completeTask(task.id);
-            if (res && res.success) {
-              task.completed = true;
-              Goldenapp.addCoin(300);
-              GoldenappUI.toast('+300 🪙 qo\'shildi!');
-              this._render();
-              document.getElementById('tasksProgress').textContent =
-                this._doneCount() + '/' + Goldenapp.user.dailyTasks.length;
+          GoldenappAds.showTask(
+            async () => {
+              const res = await GoldenappApi.completeTask(task.id);
+              if (res && res.success) {
+                task.completed = true;
+                Goldenapp.addCoin(300);
+                GoldenappUI.toast('+300 🪙 qo\'shildi!');
+                this._render();
+                document.getElementById('tasksProgress').textContent =
+                  this._doneCount() + '/' + Goldenapp.user.dailyTasks.length;
+              }
+            },
+            (err) => {
+              GoldenappUI.toast('Reklama ko\'rsatilmadi: ' + (err.message || 'xatolik'));
+              console.error('[Tasks] Reklama xatosi:', err);
             }
-          });
+          );
         });
       }
       stack.appendChild(card);
