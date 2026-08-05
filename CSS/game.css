@@ -1,0 +1,198 @@
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100vh - var(--h-topbar) - var(--h-tabbar) - 20px);
+  padding-top: var(--sp-2);
+}
+
+/* ---- Sirli sandiq orb (yon tomonda suzib yuruvchi tugma) ---- */
+.chest-orb {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  width: 60px;
+  height: 60px;
+  z-index: 5;
+}
+
+.chest-orb__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--gold-300), var(--gold-600), var(--gold-300));
+  animation: chestSpin 6s linear infinite;
+  filter: blur(0.3px);
+}
+
+.chest-orb__ring::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--bg-mid);
+}
+
+@keyframes chestSpin {
+  to { transform: rotate(360deg); }
+}
+
+.chest-orb__emoji {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  animation: chestFloat 2.4s ease-in-out infinite;
+}
+
+@keyframes chestFloat {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-6px) rotate(3deg); }
+}
+
+.chest-orb:active .chest-orb__emoji {
+  transform: scale(0.88) !important;
+}
+
+/* ---- Hero (markaziy blok) ---- */
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--sp-3);
+  width: 100%;
+}
+
+.hero__eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold-300);
+  letter-spacing: 0.01em;
+}
+
+.coin-zone {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: var(--sp-2) 0;
+}
+
+.coin {
+  position: relative;
+  width: 176px;
+  height: 176px;
+  border-radius: 50%;
+  transition: transform 0.09s cubic-bezier(.3,1,.4,1);
+}
+
+.coin:active {
+  transform: scale(0.92);
+}
+
+.coin__aura {
+  position: absolute;
+  inset: -36px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242,174,48,0.5) 0%, rgba(242,174,48,0.12) 55%, transparent 76%);
+  animation: auraBreathe 2.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes auraBreathe {
+  0%, 100% { transform: scale(1);    opacity: 0.8; }
+  50%      { transform: scale(1.14); opacity: 1;   }
+}
+
+.coin__disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 34% 28%, var(--gold-100), var(--gold-300) 42%, var(--gold-800) 100%);
+  box-shadow:
+    inset 0 -14px 26px rgba(90,50,0,0.5),
+    inset 0 10px 20px rgba(255,255,255,0.55),
+    0 18px 34px rgba(0,0,0,0.45);
+}
+
+.coin__ring {
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  border: 2px dashed rgba(90,50,0,0.35);
+}
+
+.coin__glyph {
+  position: relative;
+  font-family: var(--f-display);
+  font-size: 74px;
+  font-weight: 800;
+  color: rgba(90,50,0,0.55);
+  text-shadow: 0 2px 0 rgba(255,255,255,0.3);
+}
+
+/* ---- Effekt qatlami (raqamlar, zarralar) ---- */
+.fx-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.fx-num {
+  position: absolute;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 21px;
+  color: var(--gold-300);
+  text-shadow: 0 3px 10px rgba(0,0,0,0.5);
+  animation: fxNumRise 0.85s cubic-bezier(.15,.8,.3,1) forwards;
+}
+
+@keyframes fxNumRise {
+  0%   { opacity: 0; transform: translate(-50%, 0) scale(0.55); }
+  18%  { opacity: 1; transform: translate(-50%, -14px) scale(1.05); }
+  100% { opacity: 0; transform: translate(-50%, -100px) scale(0.92); }
+}
+
+.fx-spark {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold-300);
+  box-shadow: 0 0 6px rgba(242,174,48,0.8);
+  animation: fxSparkOut 0.55s ease-out forwards;
+}
+
+@keyframes fxSparkOut {
+  0%   { opacity: 1; transform: translate(0,0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(0.15); }
+}
+
+.hero__title {
+  font-family: var(--f-display);
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.hero__desc {
+  font-size: 13.5px;
+  color: var(--ink-300);
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+.hero__desc strong { color: var(--gold-300); }

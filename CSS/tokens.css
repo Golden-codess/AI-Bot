@@ -1,0 +1,83 @@
+/*
+  TOKENS.CSS — GOLDENAPP DESIGN SYSTEM
+  Mavzu: "Quyuq kechqurun osmoni ustida eritilgan oltin"
+  Signature: markazdagi nafas oladigan tanga + iz qoldirmaydigan, silliq teginish.
+*/
+
+:root {
+  /* ---- Fon qatlamlari ---- */
+  --bg-void:        #05060D;
+  --bg-deep:        #0A0C18;
+  --bg-mid:         #12152A;
+  --bg-surface:     #191D38;
+  --bg-surface-2:   #212545;
+
+  /* ---- Oltin (signature aksent) ---- */
+  --gold-100:       #FFF3D1;
+  --gold-300:       #FFD26B;
+  --gold-500:       #F2AE30;
+  --gold-600:       #DB8C16;
+  --gold-800:       #8F5406;
+
+  /* ---- Ikkinchi aksent (chuqur ko'k-binafsha, energiya/stars) ---- */
+  --violet-300:     #9AA3FF;
+  --violet-500:     #6C74E8;
+
+  /* ---- Muvaffaqiyat / xato ---- */
+  --mint-400:       #6FE0A8;
+  --coral-400:      #FF8371;
+
+  /* ---- Matn ---- */
+  --ink-100:        #F7F5FF;
+  --ink-300:        #B9BCDA;
+  --ink-500:        #767AA0;
+
+  /* ---- Chegara/qatlam chiziqlari (juft juda nozik, hech qachon "ramka" his qilmasin) ---- */
+  --line-1:         rgba(255,255,255,0.06);
+  --line-gold:      rgba(242,174,48,0.28);
+
+  /* ---- Soyalar ---- */
+  --sh-card:        0 10px 34px rgba(0,0,0,0.4);
+  --sh-gold:        0 0 46px rgba(242,174,48,0.32);
+  --sh-btn:         0 6px 18px rgba(0,0,0,0.35);
+
+  /* ---- Tipografiya ---- */
+  --f-display: 'Baloo 2', 'Manrope', sans-serif;
+  --f-body:    'Manrope', sans-serif;
+
+  /* ---- Radius (hamma joyda yumaloq — hech qachon to'g'ri burchak "ramka" hissi bermasin) ---- */
+  --r-sm:  14px;
+  --r-md:  20px;
+  --r-lg:  28px;
+  --r-full: 999px;
+
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;
+  --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+
+  --h-topbar: 58px;
+  --h-tabbar: 74px;
+}
+
+html, body {
+  background: var(--bg-deep);
+  background-image:
+    radial-gradient(90% 60% at 50% -10%, rgba(108,116,232,0.14), transparent 60%),
+    radial-gradient(70% 50% at 50% 105%, rgba(242,174,48,0.10), transparent 60%);
+  color: var(--ink-100);
+  font-family: var(--f-body);
+}
+
+button {
+  font-family: var(--f-body);
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

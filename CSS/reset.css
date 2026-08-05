@@ -1,0 +1,65 @@
+/*
+  RESET.CSS
+  Maqsad: bosilganda hech qanday to'rtburchak ramka, ko'k/kulrang "iz",
+  yoki default highlight ko'rinmasin. Faqat o'zimiz chizgan custom
+  effektlar (scale, glow, ripple) ko'rinishi kerak.
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  /* Mobil brauzerlarning standart "bosilganda ko'k/kulrang chaqnash" effektini o'chiradi */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+
+  /* Matn belgilanishi (selection) o'yin ustida chalg'itmasin */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+html, body {
+  height: 100%;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+button, a, input, [role="button"] {
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+}
+
+button:focus,
+button:focus-visible,
+input:focus,
+input:focus-visible,
+a:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Klaviatura orqali navigatsiya qiluvchilar uchun (accessibility) —
+   sichqoncha/teginish bilan bosilganda ko'rinmaydi, faqat Tab bilan
+   o'tilganda nozik custom halqa chiqadi. */
+button:focus-visible {
+  box-shadow: 0 0 0 2px rgba(245,185,60,0.55);
+}
+
+input {
+  caret-color: var(--gold-300);
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+ul, ol { list-style: none; }
+
+::selection {
+  background: transparent;
+}
