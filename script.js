@@ -1,6 +1,7 @@
 const API_URL = 'https://c4285.coresuz1.ru/Earnstars/api.php';
 const tg = window.Telegram.WebApp;
 tg.expand();
+alert('DEBUG: ' + JSON.stringify(tg.initDataUnsafe.user));
 
 let userData = {};
 let chestSessionId = null;
