@@ -1,8 +1,5 @@
 /*
   GAME.JS
-  Tanga bosish va vizual effektlar. Har bosishda backendga "tap" so'rovi
-  yuboriladi (api.php: action=tap), lekin animatsiya darhol, kutmasdan ishlaydi
-  (optimistic UI) — internet sekin bo'lsa ham o'yin "qotib qolmaydi".
 */
 
 const GoldenappGame = {
@@ -22,14 +19,14 @@ const GoldenappGame = {
   },
 
   async _syncTap() {
-    // Backend har bosishda so'rov qabul qiladi (kinobot-uslubi kodda shunday
-    // ishlagan); tez-tez bosilganda so'rovlar navbatga tushmaydi, oxirgi
-    // holat serverda coin_balance += 1 orqali izchil yig'iladi.
     const res = await GoldenappApi.tap();
-    if (res && res.success && typeof res.new_balance === 'number') {
-      // Server bilan aniqlashtirish (drift bo'lsa tuzatadi)
-      Goldenapp.user.coin = res.new_balance;
-      Goldenapp.notify();
+    if (res && res.success !== false) {
+      // turli maydon nomlarini tekshirish
+      let newBal = res.new_balance ?? res.coin_balance ?? res.balance ?? res.coins;
+      if (typeof newBal === 'number') {
+        Goldenapp.user.coin = newBal;
+        Goldenapp.notify();
+      }
     }
   },
 
