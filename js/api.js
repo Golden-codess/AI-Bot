@@ -1,12 +1,9 @@
 /*
   API.JS
   Backend manzili: Cores.uz hostingdagi haqiqiy api.php.
-  DIQQAT: bu manzil sizning haqiqiy backend joylashuvingiz — o'zgartirmang,
-  faqat backend domeni/papkasi o'zgarsa shu yerda yangilanadi.
 */
 
 const GoldenappApi = {
-
   baseUrl: 'https://c4285.coresuz1.ru/Earnstars/api.php',
 
   _tgId() {
@@ -21,7 +18,7 @@ const GoldenappApi = {
       return await res.json();
     } catch (e) {
       console.warn('[Api] GET xato:', e);
-      return { success: false };
+      return { success: false, error: e.message };
     }
   },
 
@@ -35,14 +32,26 @@ const GoldenappApi = {
       return await res.json();
     } catch (e) {
       console.warn('[Api] POST xato:', e);
-      return { success: false };
+      return { success: false, error: e.message };
     }
   },
 
   async loadUser() {
     const tgId = this._tgId();
-    if (!tgId) return { success: false };
-    return this._get({ action: 'getUser', tg_id: tgId });
+    if (!tgId) return { success: false, error: 'No tg_id' };
+    const data = await this._get({ action: 'getUser', tg_id: tgId });
+    // Backend turli formatda javob qaytarishi mumkin
+    if (data && data.success !== false) {
+      // Agar ma'lumotlar to'g'ridan-to'g'ri data ichida bo'lsa
+      if (data.coin_balance !== undefined) return data;
+      // Agar 'user' obyekti ichida bo'lsa
+      if (data.user) return data.user;
+      // Agar 'balance' yoki 'coins' bo'lsa
+      if (data.balance !== undefined) {
+        return { coin_balance: data.balance, stars_balance: data.stars || 0, ads_watched: data.ads || 0 };
+      }
+    }
+    return data; // fallback
   },
 
   async tap() {
@@ -67,16 +76,15 @@ const GoldenappApi = {
   },
 
   async confirmAd(source) {
-    // Hozirgi backendda alohida "confirmAd" endpoint yo'q — kerak bo'lganda
-    // shu yerga qo'shiladi. Hozircha reklama tasdiqlanishi tap/task/chest
-    // oqimlari ichida hisoblanadi.
+    // Hozircha backendda maxsus endpoint yo'q, lekin saqlab qo'yamiz
     return { success: true, source };
   },
 
   async getTasks() {
     const tgId = this._tgId();
     if (!tgId) return [];
-    return this._get({ action: 'getTasks', tg_id: tgId });
+    const data = await this._get({ action: 'getTasks', tg_id: tgId });
+    return Array.isArray(data) ? data : (data.tasks || []);
   },
 
   async completeTask(taskId) {
