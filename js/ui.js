@@ -1,6 +1,5 @@
 /*
   UI.JS
-  Umumiy UI yordamchilari.
 */
 
 const GoldenappUI = {
