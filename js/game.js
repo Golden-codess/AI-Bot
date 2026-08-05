@@ -21,7 +21,6 @@ const GoldenappGame = {
   async _syncTap() {
     const res = await GoldenappApi.tap();
     if (res && res.success !== false) {
-      // turli maydon nomlarini tekshirish
       let newBal = res.new_balance ?? res.coin_balance ?? res.balance ?? res.coins;
       if (typeof newBal === 'number') {
         Goldenapp.user.coin = newBal;
