@@ -1,92 +1,221 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>⭐ Coin Miner</title>
-    <script src="https://telegram.adsgram.ai/js/adsgram.js"></script>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0A0C18">
+<title>Goldenapp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/game.css">
+<link rel="stylesheet" href="css/chest.css">
+<link rel="stylesheet" href="css/profile.css">
+<link rel="stylesheet" href="css/tasks.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <div id="app">
-        <!-- HEADER -->
-        <header id="header">
-            <div class="balance-card">
-                <span class="icon">🪙</span>
-                <span id="coinBalance">0</span>
-                <small>tang</small>
-            </div>
-            <div class="balance-card star">
-                <span class="icon">⭐</span>
-                <span id="starBalance">0.00</span>
-                <small>stars</small>
-            </div>
-            <div class="balance-card ads">
-                <span class="icon">📺</span>
-                <span id="adsCount">0</span>
-                <small>rekl</small>
-            </div>
-        </header>
 
-        <!-- GAME -->
-        <main id="gameArea">
-            <div id="chestWrapper" onclick="startChestFlow()">
-                <div id="chestContainer">
-                    <div class="chest-lid"></div>
-                    <div class="chest-body">🎁</div>
-                    <div class="chest-glow"></div>
-                </div>
-                <div id="chestProgress"><div id="progressFill" style="width:0%"></div></div>
-                <div id="chestStatus">🔥 Bosing – sandiq oching!</div>
-            </div>
+<div id="app" class="app">
 
-            <div id="tapArea" onclick="handleTap()">
-                <div id="tapCoin">🪙</div>
-                <span id="tapCounter">+1</span>
-            </div>
-        </main>
-
-        <!-- NAV -->
-        <nav id="bottomNav">
-            <button class="nav-item active" data-tab="game">🎮 O'yin</button>
-            <button class="nav-item" data-tab="tasks">📋 Vazifalar</button>
-            <button class="nav-item" data-tab="exchange">💱 Ayirboshlash</button>
-            <button class="nav-item" data-tab="profile">👤 Profil</button>
-        </nav>
-
-        <!-- TABS -->
-        <section id="tabContent">
-            <div id="tab-game" class="tab-pane active">
-                <h2>🪙 Yig‘ishni boshlang!</h2>
-                <p>Har bir bosish <strong>+1 tanga</strong>. Sandiq orqali <strong>⭐ Stars</strong> yutib oling!</p>
-            </div>
-            <div id="tab-tasks" class="tab-pane" style="display:none;">
-                <h2>📋 Kunlik vazifalar</h2>
-                <div id="taskList"></div>
-                <p class="hint">✅ Har bir vazifa uchun <strong>300 coin</strong> va <strong>+1 reklama</strong></p>
-            </div>
-            <div id="tab-exchange" class="tab-pane" style="display:none;">
-                <h2>💱 Tanga → Stars</h2>
-                <div class="rate-box">1 ⭐ ≈ <span id="exchangeRate">4,875</span> tanga</div>
-                <p>Sizda: <strong id="exchangeCoins">0</strong> tanga</p>
-                <input type="number" id="exchangeInput" placeholder="Stars miqdori (1+)" min="1">
-                <button onclick="requestExchange()">Almashtirish</button>
-                <div id="exchangeResult" class="result-msg"></div>
-            </div>
-            <div id="tab-profile" class="tab-pane" style="display:none;">
-                <h2>👤 Mening ma'lumotlarim</h2>
-                <div class="profile-row"><span>ID:</span> <span id="userId">-</span></div>
-                <div class="profile-row"><span>Ism:</span> <span id="userName">-</span></div>
-                <div class="profile-row"><span>📺 Ko'rilgan reklama:</span> <span id="profileAds">0</span></div>
-                <hr>
-                <h3>⭐ Stars yechib olish</h3>
-                <p><small>Ruxsat: 15, 25 yoki 50+</small></p>
-                <input type="number" id="withdrawInput" placeholder="Stars soni..." min="15">
-                <button onclick="requestWithdraw()">So‘rov yuborish</button>
-                <div id="withdrawResult" class="result-msg"></div>
-            </div>
-        </section>
+  <!-- ================= TOPBAR ================= -->
+  <header class="topbar">
+    <div class="pill pill--coin">
+      <span class="pill__icon">🪙</span>
+      <span class="pill__value" id="hudCoin">0</span>
     </div>
-    <script src="script.js"></script>
+    <div class="pill pill--star">
+      <span class="pill__icon">⭐</span>
+      <span class="pill__value" id="hudStars">0.00</span>
+    </div>
+    <div class="pill pill--ad">
+      <span class="pill__icon">📺</span>
+      <span class="pill__value" id="hudAds">0</span>
+    </div>
+  </header>
+
+  <!-- ================= VIEWS ================= -->
+  <main class="views" id="views">
+
+    <!-- ---- O'YIN ---- -->
+    <section class="view view--active" data-view="game">
+      <div class="stage">
+
+        <button class="chest-orb" id="chestOrb" type="button">
+          <span class="chest-orb__ring"></span>
+          <span class="chest-orb__emoji">🎁</span>
+        </button>
+
+        <div class="hero">
+          <p class="hero__eyebrow" id="heroStatus">Bosing — sandiq oching!</p>
+
+          <div class="coin-zone">
+            <button class="coin" id="coinBtn" type="button">
+              <span class="coin__aura"></span>
+              <span class="coin__disc">
+                <span class="coin__ring"></span>
+                <span class="coin__glyph">₮</span>
+              </span>
+            </button>
+            <div class="fx-layer" id="fxLayer"></div>
+          </div>
+
+          <h1 class="hero__title">Yig'ishni boshlang!</h1>
+          <p class="hero__desc">Har bir bosish <strong>+1 tanga</strong>. Sandiq orqali <strong>⭐ Stars</strong> yutib oling.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ---- VAZIFALAR ---- -->
+    <section class="view" data-view="tasks">
+      <div class="panel-head">
+        <h2>Kunlik vazifalar</h2>
+        <span class="panel-head__badge" id="tasksProgress">0/5</span>
+      </div>
+      <div class="task-stack" id="taskStack"></div>
+      <p class="fine-print">Har bir vazifa uchun <strong>+1000 coin</strong> va <strong>+1 reklama</strong> hisoblanadi.</p>
+    </section>
+
+    <!-- ---- AYIRBOSHLASH ---- -->
+    <section class="view" data-view="exchange">
+      <div class="panel-head">
+        <h2>Tanga → Stars</h2>
+      </div>
+
+      <div class="glass-card">
+        <div class="rate-line">
+          <span>1 ⭐</span>
+          <span class="rate-line__dots"></span>
+          <span id="rateValue">4 875 🪙</span>
+        </div>
+        <div class="glass-card__row">
+          <span class="glass-card__label">Balansingiz</span>
+          <span class="glass-card__value" id="exCoinBalance">0 🪙</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <input type="number" id="exchangeInput" class="field__input" placeholder="Stars miqdori" min="1" inputmode="numeric">
+      </div>
+      <button class="btn btn--gold btn--block" id="exchangeBtn" type="button">Almashtirish</button>
+      <p class="feedback" id="exchangeFeedback"></p>
+    </section>
+
+    <!-- ---- PROFIL ---- -->
+    <section class="view" data-view="profile">
+      <div class="profile-head">
+        <div class="profile-head__avatar" id="avatarInitial">?</div>
+        <div class="profile-head__name" id="profileName">Foydalanuvchi</div>
+        <div class="profile-head__id">ID: <span id="profileId">—</span></div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-chip">
+          <span class="stat-chip__value" id="statCoins">0</span>
+          <span class="stat-chip__label">Tanga</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-chip__value" id="statAds">0</span>
+          <span class="stat-chip__label">Reklama</span>
+        </div>
+      </div>
+
+      <div class="panel-head panel-head--tight">
+        <h2>⭐ Stars yechib olish</h2>
+      </div>
+
+      <div class="glass-card glass-card--rule">
+        Yechib olish uchun tanlangan miqdorga mos <strong>Stars balansi</strong> va <strong>ko'rilgan reklama soni</strong> yetarli bo'lishi kerak.
+      </div>
+
+      <div class="chip-row" id="withdrawChips">
+        <button class="chip" data-amount="15" type="button">15 ⭐</button>
+        <button class="chip" data-amount="25" type="button">25 ⭐</button>
+        <button class="chip" data-amount="50" type="button">50 ⭐</button>
+      </div>
+
+      <div class="field">
+        <input type="number" id="withdrawCustom" class="field__input" placeholder="Boshqa miqdor (50+)" min="50" inputmode="numeric">
+      </div>
+
+      <div class="progress-lines">
+        <div class="progress-line">
+          <span>Stars</span>
+          <span id="wdStarsLine">0.00 / 15</span>
+        </div>
+        <div class="progress-line">
+          <span>Reklama</span>
+          <span id="wdAdsLine">0 / 244</span>
+        </div>
+      </div>
+
+      <button class="btn btn--gold btn--block" id="withdrawBtn" type="button" disabled>So'rov yuborish</button>
+      <p class="feedback" id="withdrawFeedback"></p>
+    </section>
+
+  </main>
+
+  <!-- ================= BOTTOM NAV ================= -->
+  <nav class="tabbar">
+    <button class="tabbar__btn tabbar__btn--active" data-target="game" type="button">
+      <span class="tabbar__icon">🎮</span><span>O'yin</span>
+    </button>
+    <button class="tabbar__btn" data-target="tasks" type="button">
+      <span class="tabbar__icon">🗒️</span><span>Vazifalar</span>
+    </button>
+    <button class="tabbar__btn" data-target="exchange" type="button">
+      <span class="tabbar__icon">💱</span><span>Ayirboshlash</span>
+    </button>
+    <button class="tabbar__btn" data-target="profile" type="button">
+      <span class="tabbar__icon">👤</span><span>Profil</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- ================= SANDIQ MODALI ================= -->
+<div class="chest-sheet" id="chestSheet">
+  <div class="chest-sheet__scrim" id="chestScrim"></div>
+  <div class="chest-sheet__card">
+    <div class="chest-visual" id="chestVisual">
+      <span class="chest-visual__glow"></span>
+      <span class="chest-visual__emoji" id="chestEmoji">🎁</span>
+    </div>
+    <h3 class="chest-sheet__title" id="chestTitle">Sirli sandiq</h3>
+    <div class="track">
+      <div class="track__fill" id="chestTrackFill"></div>
+    </div>
+    <p class="chest-sheet__caption" id="chestCaption">0 / 3 reklama ko'rildi</p>
+
+    <button class="btn btn--gold btn--block" id="chestWatchBtn" type="button">📺 Reklama ko'rish</button>
+
+    <div class="reward-callout" id="chestRewardCallout" hidden>
+      <span class="reward-callout__eyebrow">Mukofotingiz</span>
+      <span class="reward-callout__value" id="chestRewardValue">+2 500 🪙</span>
+    </div>
+
+    <button class="text-btn" id="chestCloseBtn" type="button">Yopish</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/state.js"></script>
+<script src="js/api.js"></script>
+<script src="js/ads.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/game.js"></script>
+<script src="js/chest.js"></script>
+<script src="js/tasks.js"></script>
+<script src="js/exchange.js"></script>
+<script src="js/withdraw.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/main.js"></script>
+
 </body>
-</html>
+    </html>
+    
