@@ -27,9 +27,17 @@ const GoldenappExchange = {
       return;
     }
 
+    // Mahalliy tekshiruv: yetarli coin bormi?
+    const neededCoins = Math.round(stars * Goldenapp.config.coinsPerStar);
+    if (Goldenapp.user.coin < neededCoins) {
+      feedback.className = 'feedback feedback--error';
+      feedback.textContent = `Sizda yetarli tanga yo'q. Kerak: ${neededCoins.toLocaleString('uz-UZ')} 🪙`;
+      return;
+    }
+
     const res = await GoldenappApi.exchange(stars);
 
-    if (!res || !res.success) {
+    if (!res || res.success === false) {
       feedback.className = 'feedback feedback--error';
       feedback.textContent = (res && res.message) || 'Xatolik yuz berdi.';
       return;
@@ -38,6 +46,11 @@ const GoldenappExchange = {
     feedback.className = 'feedback feedback--ok';
     feedback.textContent = res.message || 'Muvaffaqiyatli almashtirildi!';
     input.value = '';
+
+    // Balansni yangilash (agar backend yangilangan qiymatlarni qaytarsa)
+    if (res.coin_balance !== undefined) Goldenapp.user.coin = res.coin_balance;
+    if (res.stars_balance !== undefined) Goldenapp.user.starsBalance = res.stars_balance;
+    Goldenapp.notify();
 
     GoldenappAds.showInterstitial(() => {});
   },
