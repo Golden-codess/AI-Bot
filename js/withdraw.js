@@ -52,9 +52,22 @@ const GoldenappWithdraw = {
       return;
     }
 
+    // Mahalliy tekshiruv
+    if (Goldenapp.user.starsBalance < amount) {
+      feedback.className = 'feedback feedback--error';
+      feedback.textContent = `Sizda yetarli Stars yo'q. Balans: ${Goldenapp.user.starsBalance.toFixed(2)} ⭐`;
+      return;
+    }
+    const requiredAds = Goldenapp.requiredAdsForStars(amount);
+    if (Goldenapp.user.adsWatched < requiredAds) {
+      feedback.className = 'feedback feedback--error';
+      feedback.textContent = `Yetarli reklama ko'rilmagan. Kerak: ${requiredAds} ta, sizda: ${Goldenapp.user.adsWatched}`;
+      return;
+    }
+
     const res = await GoldenappApi.withdraw(amount);
 
-    if (!res || !res.success) {
+    if (!res || res.success === false) {
       feedback.className = 'feedback feedback--error';
       feedback.textContent = (res && res.message) || 'So\'rov yuborilmadi.';
       return;
@@ -62,6 +75,10 @@ const GoldenappWithdraw = {
 
     feedback.className = 'feedback feedback--ok';
     feedback.textContent = res.message || 'So\'rov qabul qilindi!';
+
+    // Balansni yangilash
+    if (res.stars_balance !== undefined) Goldenapp.user.starsBalance = res.stars_balance;
+    Goldenapp.notify();
 
     GoldenappAds.showInterstitial(() => {});
   },
