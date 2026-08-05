@@ -1,17 +1,3 @@
-/*
-  MAIN.JS
-
-  MUHIM TUZATISH (avvalgi muammo sababi):
-  Eski kodda `const tg = window.Telegram.WebApp;` to'g'ridan-to'g'ri yozilgan edi.
-  Agar sahifa Telegram tashqarisida ochilsa (masalan brauzerda test qilishda),
-  `window.Telegram` mavjud emas va bu qator DARHOL xato berib, undan keyingi
-  BUTUN skript ishlamay to'xtaydi (shu sababli hech qanday alert/funksiya
-  ishlamagan edi).
-
-  Bu yerda esa TG obyekti (state.js da) xavfsiz tekshirilgan holda olinadi,
-  va agar u mavjud bo'lmasa, ilova baribir yiqilmasdan davom etadi.
-*/
-
 document.addEventListener('DOMContentLoaded', async () => {
 
   if (TG) {
@@ -30,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.warn('[main] Telegram WebApp topilmadi — ilova mustaqil rejimda ishlamoqda.');
   }
 
-  // Profil UI (mavjud ma'lumot bilan darhol to'ldiriladi)
+  // Profil UI
   document.getElementById('profileName').textContent = Goldenapp.user.firstName;
   document.getElementById('profileId').textContent = Goldenapp.user.telegramId || '—';
   document.getElementById('avatarInitial').textContent =
@@ -40,14 +26,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (Goldenapp.user.telegramId) {
     try {
       const loaded = await GoldenappApi.loadUser();
-      if (loaded && loaded.coin_balance !== undefined) {
-        Goldenapp.user.coin = Number(loaded.coin_balance) || 0;
-        Goldenapp.user.starsBalance = Number(loaded.stars_balance) || 0;
-        Goldenapp.user.adsWatched = Number(loaded.ads_watched) || 0;
+      // loaded obyekti turli formatda bo'lishi mumkin
+      if (loaded && loaded.success !== false) {
+        // maydonlarni topish
+        const coin = loaded.coin_balance ?? loaded.balance ?? loaded.coins ?? 0;
+        const stars = loaded.stars_balance ?? loaded.stars ?? 0;
+        const ads = loaded.ads_watched ?? loaded.ads ?? 0;
+        Goldenapp.user.coin = Number(coin);
+        Goldenapp.user.starsBalance = Number(stars);
+        Goldenapp.user.adsWatched = Number(ads);
         Goldenapp.notify();
+      } else {
+        console.warn('[main] Backend ma\'lumot qaytarmadi, mahalliy holat saqlanadi.');
       }
     } catch (e) {
-      console.warn('[main] Backend hozircha ulanmadi:', e);
+      console.warn('[main] Backend ulanmadi:', e);
     }
   }
 
