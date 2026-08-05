@@ -2,11 +2,6 @@
  * ============================================================================
  *  CHEST.JS — GOLDENAPP SIRLI SANDIQ MODULI
  * ============================================================================
- *  Loyiha qoidasi: real moliyaviy qiymatga ega birlik (Telegram Stars)
- *  HECH QACHON tasodifiy miqdorda berilmaydi — faqat aniq, oldindan
- *  belgilangan (deterministik) formula bilan. Tasodifiylik faqat COIN
- *  miqdorida bo'lishi mumkin (real pulga aylanmaydigan, cheksiz resurs).
- * ============================================================================
  */
 
 const GoldenappChest = {
@@ -69,7 +64,14 @@ const GoldenappChest = {
   _watch() {
     const btn = document.getElementById('chestWatchBtn');
     btn.disabled = true;
-    GoldenappAds.showReward('chest', () => this._onConfirmed(), () => { btn.disabled = false; });
+    GoldenappAds.showReward('chest', 
+      () => this._onConfirmed(), 
+      (err) => {
+        btn.disabled = false;
+        GoldenappUI.toast('Reklama ko\'rsatilmadi: ' + (err.message || 'xatolik'));
+        console.error('[Chest] Reklama xatosi:', err);
+      }
+    );
   },
 
   _onConfirmed() {
@@ -112,8 +114,6 @@ const GoldenappChest = {
 
     Goldenapp.addCoin(cfg.finalCoin);
 
-    // Backendga aniq (deterministik) coin mukofotini "stars_won"=0 bilan
-    // yozib qo'yamiz — chest orqali Stars berilmaydi, faqat coin.
     await GoldenappApi.finishChest(this.state.sessionId, 0, this.state.adsInChest);
 
     const box = document.getElementById('chestRewardCallout');
