@@ -14,43 +14,56 @@ const GoldenappAds = {
   },
 
   get sdkReady() {
-    return typeof window.Adsgram !== 'undefined';
+    return typeof window.Adsgram !== 'undefined' && typeof window.Adsgram.showRewardedVideo === 'function';
   },
 
   showReward(source, onSuccess, onFail) {
     if (!this.sdkReady) {
-      console.warn('[Ads] SDK topilmadi — test rejimi simulyatsiyasi');
-      setTimeout(() => onSuccess && onSuccess(), 500);
+      console.warn('[Ads] SDK topilmadi yoki showRewardedVideo mavjud emas.');
+      if (onFail) onFail(new Error('SDK not ready'));
       return;
     }
     window.Adsgram.showRewardedVideo({ blockId: this.blockIds.reward })
       .then(() => {
+        console.log('[Ads] Reward video muvaffaqiyatli');
         Goldenapp.registerConfirmedAd(source);
-        onSuccess && onSuccess();
+        if (onSuccess) onSuccess();
       })
       .catch((err) => {
         console.warn('[Ads] Reward xato:', err);
-        onFail && onFail(err);
+        if (onFail) onFail(err);
       });
   },
 
   showTask(onSuccess, onFail) {
     if (!this.sdkReady) {
-      setTimeout(() => onSuccess && onSuccess(), 500);
+      if (onFail) onFail(new Error('SDK not ready'));
       return;
     }
     window.Adsgram.showRewardedVideo({ blockId: this.blockIds.reward })
       .then(() => {
         Goldenapp.registerConfirmedAd('task');
-        onSuccess && onSuccess();
+        if (onSuccess) onSuccess();
       })
-      .catch((err) => onFail && onFail(err));
+      .catch((err) => {
+        console.warn('[Ads] Task xato:', err);
+        if (onFail) onFail(err);
+      });
   },
 
   showInterstitial(onDone) {
-    if (!this.sdkReady) { onDone && onDone(); return; }
+    if (!this.sdkReady) {
+      console.warn('[Ads] Interstitial SDK not ready');
+      if (onDone) onDone();
+      return;
+    }
     window.Adsgram.showInterstitialAd({ blockId: this.blockIds.interstitial })
-      .then(() => { onDone && onDone(); })
-      .catch(() => { onDone && onDone(); });
+      .then(() => {
+        if (onDone) onDone();
+      })
+      .catch((err) => {
+        console.warn('[Ads] Interstitial xato:', err);
+        if (onDone) onDone();
+      });
   },
 };
