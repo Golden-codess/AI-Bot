@@ -16,8 +16,8 @@
 <link rel="stylesheet" href="CSS/profile.css">
 <link rel="stylesheet" href="CSS/tasks.css">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<!-- Adsgram SDK - to'g'ri manzil -->
-<script src="https://cdn.adsgram.ai/js/adsgram.js"></script>
+<!-- Adsgram SDK - RASMIY, to'g'ri manzil -->
+<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 </head>
 <body>
 
@@ -207,15 +207,16 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // SDK yuklanganligini tekshirish va konsolga chiqarish
-  console.log('[SDK] Adsgram SDK yuklanmoqda...');
-  setTimeout(() => {
-    if (typeof window.Adsgram !== 'undefined') {
-      console.log('[SDK] ✅ Adsgram SDK muvaffaqiyatli yuklandi!');
-    } else {
-      console.warn('[SDK] ❌ Adsgram SDK yuklanmadi!');
-    }
-  }, 1000);
+  // SDK diagnostikasi - konsolda ko'rish uchun (ixtiyoriy, xato bermaydi)
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      if (typeof window.Adsgram !== 'undefined') {
+        console.log('[SDK] ✅ Adsgram SDK muvaffaqiyatli yuklandi!');
+      } else {
+        console.warn('[SDK] ❌ Adsgram SDK hali yuklanmadi (sekin internetda normal, biroz kutiladi).');
+      }
+    }, 1500);
+  });
 </script>
 
 <script src="js/state.js"></script>
